@@ -1,0 +1,15 @@
+name: Docker Image CI
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+permissions:
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: docker login ghcr.io -u ${{ github.actor }} -p "${{ secrets.GITHUB_TOKEN }}"
+    - run: docker build . --tag ghcr.io/${{ github.repository_owner }}/ubuntu:24.04
+    - run: docker push ghcr.io/${{ github.repository_owner }}/ubuntu:24.04
